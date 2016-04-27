@@ -6,7 +6,7 @@ homepage:            https://github.com/ThomWright/bristol-api#readme
 license:             BSD3
 license-file:        LICENSE
 author:              Thom Wright
-maintainer:          example@example.com
+maintainer:          thom@thomwright.co.uk
 copyright:           2016 Thom Wright
 category:            Web
 build-type:          Simple
@@ -15,12 +15,14 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Lib
+  exposed-modules:     BristolTransportApi
+                     , BristolTransportApi.ImportSources
+                     , BristolTransportApi.ResponseBody
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , http-client
-                     , servant >= 0.4
-                     , servant-client >= 0.4
+                     , servant == 0.6
+                     , servant-client == 0.6
                      , text
                      , transformers
   default-language:    Haskell2010
@@ -31,6 +33,13 @@ executable bristol-api-exe
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , bristol-api
+                     , aeson
+                     , aeson-pretty
+                     , bytestring
+                     , http-client
+                     , http-client-tls
+                     , text
+                     , transformers
   default-language:    Haskell2010
 
 test-suite bristol-api-test
