@@ -11,7 +11,7 @@ import Network.HTTP.Client (newManager)
 import Network.HTTP.Client.TLS (tlsManagerSettings)
 import System.Environment
 
-import BristolTransportApi (baseUrl, importsources)
+import BristolTransportApi (baseUrl, importsources, transitStops)
 
 main :: IO ()
 main = do

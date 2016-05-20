@@ -9,7 +9,6 @@ module BristolTransportApi.ImportSources
 ) where
 
 import Data.Aeson
-import Data.Aeson.Types
 import Data.Text
 import GHC.Generics
 import Servant.API
@@ -24,7 +23,6 @@ type ImportSourcesApi =  "importsources" :> Header "X-Api-Key" Text :> Get '[JSO
 
 type ImportSourcesResponse = ResponseBody [ImportSource]
 
--- | Import source data
 data ImportSource = ImportSource
   { name :: Maybe String
     -- ^ The name of the dataset (where available)
