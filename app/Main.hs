@@ -1,17 +1,19 @@
 
 module Main where
 
-import Control.Monad.Trans.Except (ExceptT, runExceptT)
+import Control.Monad.Trans.Except (runExceptT)
 import Data.Aeson
 import Data.Aeson.Encode.Pretty
-import qualified Data.ByteString.Lazy as BSL
+import qualified Data.ByteString.Lazy as LazyByteStr
 import Data.Text
 import Data.Text.Encoding
 import Network.HTTP.Client (newManager)
 import Network.HTTP.Client.TLS (tlsManagerSettings)
 import System.Environment
 
-import BristolTransportApi (baseUrl, importsources, transitStops)
+import Servant.API
+
+import BristolTransportApi (baseUrl, makeApi)
 
 main :: IO ()
 main = do
@@ -21,12 +23,13 @@ main = do
     Nothing -> putStrLn "No environment variable for BRISTOL_API_KEY"
 
 prettyJson :: ToJSON a => a -> String
-prettyJson d = unpack $ decodeUtf8 $ BSL.toStrict (encodePretty d)
+prettyJson d = unpack $ decodeUtf8 $ LazyByteStr.toStrict (encodePretty d)
 
 run :: Text -> IO ()
 run apiKey = do
+  let (importsources :<|> _) = makeApi (Just apiKey)
   manager <- newManager tlsManagerSettings
-  res <- runExceptT (importsources (Just apiKey) manager baseUrl)
+  res <- runExceptT (importsources manager baseUrl)
   case res of
     Left err -> putStrLn $ "Error: " ++ show err
     Right body -> putStrLn $ prettyJson body

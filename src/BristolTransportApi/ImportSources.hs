@@ -19,7 +19,7 @@ import BristolTransportApi.ResponseBody
 --
 -- This method is used to discover the externally imported data sets that make up the data within the system.
 -- Each data set is identified by an 'ImportSourceID', which can be used to retrieve lists of Transit Agencies, TransitStops and more.
-type ImportSourcesApi =  "importsources" :> Header "X-Api-Key" Text :> Get '[JSON] ImportSourcesResponse
+type ImportSourcesApi =  "importsources" :> Get '[JSON] ImportSourcesResponse
 
 type ImportSourcesResponse = ResponseBody [ImportSource]
 

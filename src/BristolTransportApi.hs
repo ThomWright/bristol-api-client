@@ -4,11 +4,11 @@
 -- | High-level description of the Bristol Transport API
 module BristolTransportApi
 ( baseUrl
-, importsources
-, transitStops
+, makeApi
 ) where
 
 import Data.Proxy
+import Data.Text
 import Servant.API
 import Servant.Client
 
@@ -19,15 +19,14 @@ baseUrl :: BaseUrl
 baseUrl = BaseUrl Https "bristol.api.urbanthings.io" 443 "/api/v2.0"
 
 type StaticApis = "static" :>
-  ImportSourcesApi
+  (    ImportSourcesApi
   :<|> TransitStopsApi
+  )
 
-type BristolTransportApi =
+type BristolTransportApi = Header "X-Api-Key" Text :>
   StaticApis
-  -- :<|> RealTimeApis
 
 proxyApi :: Proxy BristolTransportApi
 proxyApi = Proxy
 
-{-otherTopLevelPath :<|> -}
-importsources :<|> transitStops = client proxyApi
+makeApi = client proxyApi
