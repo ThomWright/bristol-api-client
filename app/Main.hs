@@ -13,7 +13,7 @@ import System.Environment
 
 import Servant.API
 
-import BristolTransportApi (baseUrl, makeApi)
+import BristolTransportApi (baseUrl, createApi)
 
 main :: IO ()
 main = do
@@ -27,7 +27,7 @@ prettyJson d = unpack $ decodeUtf8 $ LazyByteStr.toStrict (encodePretty d)
 
 run :: Text -> IO ()
 run apiKey = do
-  let (importsources :<|> _) = makeApi (Just apiKey)
+  let (importsources :<|> _) = createApi (Just apiKey)
   manager <- newManager tlsManagerSettings
   res <- runExceptT (importsources manager baseUrl)
   case res of
