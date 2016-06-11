@@ -44,6 +44,7 @@ executable bristol-api-client-exe
                      , bytestring
                      , http-client
                      , http-client-tls
+                     , servant == 0.6
                      , text
                      , transformers
   default-language:    Haskell2010

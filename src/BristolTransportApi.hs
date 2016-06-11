@@ -3,21 +3,17 @@
 
 -- | High-level description of the Bristol Transport API
 module BristolTransportApi
-( ClientFactory
-, baseUrl
+( baseUrl
 , createApi
 ) where
 
 import Data.Proxy
 import Data.Text
-import Network.HTTP.Client (Manager)
-import Servant.API
-import Servant.Common.Req (ClientM)
-import Servant.Client
+import Servant.API (Header, (:>), (:<|>))
+import Servant.Client (BaseUrl(..), Scheme( Https ), client)
 
 import BristolTransportApi.ImportSources
 import BristolTransportApi.TransitStops
-import BristolTransportApi.ResponseBody
 
 baseUrl :: BaseUrl
 baseUrl = BaseUrl Https "bristol.api.urbanthings.io" 443 "/api/v2.0"
@@ -33,9 +29,4 @@ type BristolTransportApi = Header "X-Api-Key" Text :>
 proxyApi :: Proxy BristolTransportApi
 proxyApi = Proxy
 
-type ClientFactory a = Manager -> BaseUrl -> ClientM (ResponseBody a)
-
-createApi :: Maybe Text -> (    ClientFactory [ImportSource]
-                           :<|> ClientFactory [TransitStop]
-                           )
 createApi = client proxyApi

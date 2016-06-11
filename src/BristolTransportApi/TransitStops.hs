@@ -16,14 +16,43 @@ import BristolTransportApi.ResponseBody
 import BristolTransportApi.VehicleType
 import BristolTransportApi.PlacePointType
 
--- | Retrieve a list of one or more TransitStop objects
+-- | Retrieve a list of one or more 'TransitStop' objects
 --
 -- This method is used to retrieve matching TransitStop objects - bus stops, train stations, car parks, etc.
 -- These can be retrieved based upon location by supplying a lat/lng bounding box.
 -- Alternatively (or in parallel) the list can be filtered by matching against the name of the transit stop or the dataset to which it belongs.
 --
 -- Max size of the bounding box is 20km x 20km
-type TransitStopsApi =  "transitstops" :> Get '[JSON] TransitStopsResponse
+--
+-- Query Parameters:
+--
+-- [@minLat@] The minimum lat of the bounding box.
+-- [@maxLat@] The maximum latitude of the bounding box.
+-- [@minLng@] The minimum longitude of the bounding box.
+-- [@maxLng@] The maximum longitude of the bounding box.
+-- [@centerLat@] The latitude of a center point to search for stops nearby.
+-- [@centerLng@] The longitude of a center point to search for stops nearby.
+-- [@radius@] The radius around the center point to search for stops nearby. Specified in metres, clamped to a maximum value of 10km.
+-- [@maxResults@] The maximum number of results to return. Defaults to 1000.
+-- [@stopModes@] A comma-delimited list of stop modes used to filter the list of TransitStops returned.
+-- [@stopName@] The name of particular transit stop(s) to search for. Specify six or more characters. Searches are case insensitive.
+-- [@stopIDs@] A comma-delimited list of primary codes of transit stops to search for.
+-- [@importSource@] Optionally filter the returned list to include only TransitStops from the Dataset with this ImportSource ID (see /datasets endpoint).
+type TransitStopsApi =  (  "transitstops"
+                        :> QueryParam "minLat" Double
+                        :> QueryParam "maxLat" Double
+                        :> QueryParam "minLng" Double
+                        :> QueryParam "maxLng" Double
+                        :> QueryParam "centerLat" Double
+                        :> QueryParam "centerLng" Double
+                        :> QueryParam "radius" Double
+                        :> QueryParam "maxResults" Integer
+                        :> QueryParam "stopModes" String
+                        :> QueryParam "stopName" String
+                        :> QueryParam "stopIDs" String
+                        :> QueryParam "importSource" String
+                        :> Get '[JSON] TransitStopsResponse
+                        )
 
 type TransitStopsResponse = ResponseBody [TransitStop]
 
